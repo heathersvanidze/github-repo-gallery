@@ -2,8 +2,13 @@
 const overview = document.querySelector(".overview");
 const username = "heathersvanidze";
 //unordered list to display repos
-const repoList = document.querySelector(".repo-list");
+const repoListElement = document.querySelector(".repo-list");
+//section with class of repos where all repo information appears
+const repoSection = document.querySelector(".repos");
+//section with class of repo-data where individual repo info appears
+const repoData = document.querySelector(".repo-data");
 
+//fetches user data
 const getData = async function () {
     const res = await fetch 
     (`https://api.github.com/users/${username}`);
@@ -43,6 +48,31 @@ const displayRepoInfo = function (repos){
     const li = document.createElement("li");
     li.classList.add("repo");
     li.innerHTML = `<h3>${repo.name}</h3>`
-    repoList.append(li);
+    repoListElement.append(li);
   }
 };
+
+repoListElement.addEventListener("click", function(e){
+  if (e.target.matches("h3")){
+    const repoName = e.target.innerText;
+    getSpecificRepo(repoName);
+  }
+});
+
+const getSpecificRepo = async function (repoName) {
+  const repoRes = await fetch (
+    `https://api.github.com/repos/${username}/${repoName}`
+  );
+  const repoInfo = await repoRes.json();
+  //console.log(repoInfo);
+  //get languages
+    const fetchLanguages = await fetch (repoInfo.languages_url);
+    const languageData = await fetchLanguages.json();
+    console.log(fetchLanguages);
+} 
+
+const languages = [];
+for (let language in languages) {
+  languages.push(language);
+};
+console.log(languages);
