@@ -68,11 +68,27 @@ const getSpecificRepo = async function (repoName) {
   //get languages
     const fetchLanguages = await fetch (repoInfo.languages_url);
     const languageData = await fetchLanguages.json();
-    console.log(fetchLanguages);
-} 
 
-const languages = [];
-for (let language in languages) {
-  languages.push(language);
+    const languages = [];
+    for (const language in languageData) {
+    languages.push(language);
 };
-console.log(languages);
+    //console.log(languageData);
+    displayRepo(repoInfo, languages);
+}; 
+
+const displayRepo = function (repoInfo, languages){
+  repoData.innerHTML = "";
+  const repoDiv = document.createElement("div");
+  repoDiv.innerHTML = 
+  `<h3>Name: ${repoInfo.name}</h3>
+  <p>Description: ${repoInfo.description}</p>
+  <p>Default Branch: ${repoInfo.default_branch}</p>
+  <p>Languages: ${languages.join(", ")}</p>
+  <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>`
+  repoData.append(repoDiv);
+  repoData.classList.remove("hide");
+  repoSection.classList.add("hide");
+}
+
+
